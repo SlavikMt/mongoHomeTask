@@ -28,3 +28,33 @@ module.exports.createArticle = function(req, res) {
         res.send('Article created')
     })
 }
+
+
+module.exports.updateArticle = function(res, req) {
+    Article.findByIdAndUpdate(req.params.id, { $set: req.body },
+        (err, article) => {
+            if (err) return next(err);
+            res.send('article updated')
+        })
+}
+
+module.exports.findByFilter = function(req, res) {
+    var roles = ['title', 'subtitle', 'description', 'owner', 'category', 'createdAt', 'updatedAt'];
+    Article.find()
+        .populate('roles', null, { name: { $in: roles } })
+        .sort({ '_id': 1 })
+        .exec(function(err, articles) {
+            articles = articles.filter(function(articles) {
+                return articles.roles.length;
+            });
+            res.send(articles);
+        });
+}
+
+
+module.exports.deleteArticle = function(req, res) {
+    Article.findByIdAndRemove(req.params.id, function(err) {
+        if (err) return next(err);
+        res.send('Deleted successfully!');
+    })
+};
