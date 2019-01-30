@@ -1,7 +1,8 @@
 const User = require('../models/user.model');
 
-module.exports.create = function(req, res) {
+module.exports.createUser = function(req, res) {
     let user = new User({
+        _id: new mongoose.Types.ObjectId(),
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         role: req.body.role,
@@ -13,18 +14,19 @@ module.exports.create = function(req, res) {
         if (err) {
             return next(err)
         }
-        res.send('User created successful')
+        res.send('User created')
     })
 }
 
-exports.details = function(res, req) {
+module.exports.detailsUser = function(req, res) {
     User.findById(req.params.id, function(err, user) {
         if (err) return next(err);
         res.send(user)
     })
 }
 
-module.exports.update = function(res, req) {
+
+module.exports.updateUser = function(res, req) {
     User.findByIdAndUpdate(req.params.id, { $set: req.body },
         (err, user) => {
             if (err) return next(err);
@@ -32,7 +34,7 @@ module.exports.update = function(res, req) {
         })
 }
 
-exports.delete = function(req, res) {
+module.exports.deleteUser = function(req, res) {
     User.findByIdAndRemove(req.params.id, function(err) {
         if (err) return next(err);
         res.send('Deleted successfully!');

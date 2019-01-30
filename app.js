@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const user = require('./routes/user.route')
+
 const app = express();
 
 const mongoose = require('mongoose')
@@ -12,9 +12,16 @@ mongoose.Promise = global.Promise;
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+const userRouter = require('./routes/user.route')
+const articleRouter = require('./routes/article.routes')
+
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use('/users', user);
+app.use('/users', userRouter);
+app.use('/articles', articleRouter)
+
+
 
 let port = 3000;
 
