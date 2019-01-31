@@ -12,15 +12,15 @@ mongoose.Promise = global.Promise;
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-const userRouter = require('./routes/user.route')
-const articleRouter = require('./routes/article.routes')
+const User = require('./models/user.model')
+const Article = require('./models/article.model')
 
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use('/users', userRouter);
-app.use('/articles', articleRouter)
-
+app.use('/users', User);
+app.use('/articles', Article)
+require('./routes/route')
 
 
 let port = 3000;
