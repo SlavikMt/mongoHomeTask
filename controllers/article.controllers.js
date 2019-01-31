@@ -6,7 +6,7 @@ const Article = require('../models/article.model');
 
 module.exports.findArticles = function(req, res) {
     Article
-        .find({ _id: id })
+        .find({ user: user._id })
         .populate('user')
         .exec(function(err, articles) {
             if (err) return err;
