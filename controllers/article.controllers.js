@@ -6,7 +6,7 @@ const Article = require('../models/article.model');
 
 module.exports.findArticles = function(req, res) {
     Article
-        .find({ owner: user._id })
+        .find({ _id: id })
         .populate('user')
         .exec(function(err, articles) {
             if (err) return err;
@@ -31,11 +31,18 @@ module.exports.createArticle = function(req, res) {
 
 
 module.exports.updateArticle = function(res, req) {
-    Article.findByIdAndUpdate(req.params.id, { $set: req.body },
-        (err, article) => {
-            if (err) return next(err);
-            res.send('article updated')
-        })
+    var id = req.params.id;
+    Article.findById({ _id: id }, function(err, post) {
+        if (err) res.json({ message: 'There is not a article with that id.' })
+
+        post.save(function(err) {
+            if (err) res.json({
+                message: "There seems to be some err in updating your article."
+            });
+
+            res.json({ message: 'Article successfully updated.', article: article });
+        });
+    });
 }
 
 module.exports.findByFilter = function(req, res) {
@@ -53,8 +60,9 @@ module.exports.findByFilter = function(req, res) {
 
 
 module.exports.deleteArticle = function(req, res) {
-    Article.findByIdAndRemove(req.params.id, function(err) {
-        if (err) return next(err);
-        res.send('Deleted successfully!');
-    })
+    var id = req.params.id;
+    Article.remove({ _id: id }, function(err) {
+        if (err) res.json({ message: 'There is not a article with that id.' })
+        res.json({ message: 'Article has been successfully deleted' });
+    });
 };
