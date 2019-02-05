@@ -7,9 +7,7 @@ const UserSchema = new Schema({
     lastName: { type: String, min: 3, max: 60, required: true },
     role: { type: String, enum: ['admin', 'writer', 'guest'] },
     createdAt: { type: Date, default: Date.now },
-    numberOfArticles: [
-        { _id: { type: Schema.Types.ObjectId, ref: 'Article' } }
-    ], //default: 0, required: false }],
+    numberOfArticles: { type: Number, default: 0, required: false },
     nickname: { type: String, required: false }
 
 })
